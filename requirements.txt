@@ -1,0 +1,7 @@
+flake8==3.8.4
+flask==2.2
+ipdb==0.13.4
+gunicorn==20.1.0
+Werkzeug==2.2.2
+Flask-Cors==3.0.10
+flask_wtf
