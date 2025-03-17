@@ -1,0 +1,32 @@
+time="2025-03-16T19:56:08-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:11-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:11-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:12-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:14-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:15-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:15-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:18-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:18-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:19-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:22-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:23-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T19:56:24-05:00" level=info msg="Status: 200 OK" source=console
+
+     data_received..................: 2.3 kB 132 B/s
+     data_sent......................: 1.7 kB 101 B/s
+   ✓ failures.......................: 0.00%  0 out of 13
+     http_req_blocked...............: avg=79.16ms min=8µs   med=100.23ms max=108.52ms p(90)=107.74ms p(95)=108.05ms
+     http_req_connecting............: avg=77.9ms  min=0s    med=98.66ms  max=106.89ms p(90)=106.1ms  p(95)=106.42ms
+     http_req_duration..............: avg=8.56s   min=1.08s med=8.09s    max=16.1s    p(90)=12.56s   p(95)=14.19s  
+       { expected_response:true }...: avg=8.56s   min=1.08s med=8.09s    max=16.1s    p(90)=12.56s   p(95)=14.19s  
+     http_req_failed................: 0.00%  0 out of 13
+     http_req_receiving.............: avg=347µs   min=170µs med=330µs    max=476µs    p(90)=472.6µs  p(95)=476µs   
+     http_req_sending...............: avg=61.76µs min=22µs  med=46µs     max=234µs    p(90)=117.4µs  p(95)=170.99µs
+     http_req_tls_handshaking.......: avg=0s      min=0s    med=0s       max=0s       p(90)=0s       p(95)=0s      
+     http_req_waiting...............: avg=8.56s   min=1.08s med=8.09s    max=16.1s    p(90)=12.56s   p(95)=14.19s  
+     http_reqs......................: 13     0.755516/s
+     iteration_duration.............: avg=8.64s   min=1.18s med=8.2s     max=16.21s   p(90)=12.58s   p(95)=14.24s  
+     iterations.....................: 13     0.755516/s
+     vus............................: 1      min=1       max=10
+     vus_max........................: 10     min=10      max=10
+

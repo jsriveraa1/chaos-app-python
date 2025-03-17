@@ -1,0 +1,8 @@
+time="2025-03-16T20:25:52-05:00" level=warning msg="No script iterations fully finished, consider making the test duration longer"
+
+     data_received...: 0 B   0 B/s
+     data_sent.......: 13 kB 298 B/s
+   ✓ failures........: 0.00% 0 out of 0
+     vus.............: 100   min=100    max=100
+     vus_max.........: 100   min=100    max=100
+

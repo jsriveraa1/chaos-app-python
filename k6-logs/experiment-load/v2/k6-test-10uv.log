@@ -1,0 +1,24 @@
+
+     ✓ response code was 200
+     ✗ request duration should be < 6s
+      ↳  27% — ✓ 3 / ✗ 8
+
+     checks.........................: 63.63% 14 out of 22
+     data_received..................: 1.9 kB 105 B/s
+     data_sent......................: 1.8 kB 100 B/s
+     http_req_blocked...............: avg=136.54ms min=15µs     med=147.52ms max=155.45ms p(90)=154.65ms p(95)=155.05ms
+     http_req_connecting............: avg=89.2ms   min=0s       med=95.46ms  max=103.46ms p(90)=102.49ms p(95)=102.98ms
+   ✗ http_req_duration..............: avg=9.66s    min=94.19ms  med=10.02s   max=18.1s    p(90)=17.1s    p(95)=17.6s   
+       { expected_response:true }...: avg=9.66s    min=94.19ms  med=10.02s   max=18.1s    p(90)=17.1s    p(95)=17.6s   
+   ✓ http_req_failed................: 0.00%  0 out of 11
+     http_req_receiving.............: avg=289.36µs min=35µs     med=332µs    max=440µs    p(90)=370µs    p(95)=404.99µs
+     http_req_sending...............: avg=58.45µs  min=25µs     med=45µs     max=101µs    p(90)=94µs     p(95)=97.5µs  
+     http_req_tls_handshaking.......: avg=0s       min=0s       med=0s       max=0s       p(90)=0s       p(95)=0s      
+     http_req_waiting...............: avg=9.66s    min=93.9ms   med=10.02s   max=18.1s    p(90)=17.1s    p(95)=17.6s   
+     http_reqs......................: 11     0.602338/s
+     iteration_duration.............: avg=9.8s     min=241.54ms med=10.02s   max=18.26s   p(90)=17.25s   p(95)=17.75s  
+     iterations.....................: 11     0.602338/s
+     vus............................: 1      min=1        max=10
+     vus_max........................: 10     min=10       max=10
+
+time="2025-03-17T07:50:26-05:00" level=error msg="thresholds on metrics 'http_req_duration' have been crossed"

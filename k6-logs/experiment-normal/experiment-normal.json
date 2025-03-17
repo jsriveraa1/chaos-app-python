@@ -1,0 +1,71 @@
+{
+  "title": "Cual es impacto de un servicio ECS al aumentar la demanda de solicitudes ?",
+  "description": "La infraestructura actual deberia soportar la demanda en ciertas horas pico.",
+  "tags": ["ECS", "ECR", "ALB"],
+  "configuration": {
+    "aws_region": "us-east-1"
+  },
+  "steady-state-hypothesis": {
+    "title": "Consumo del servicio /operation",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "respuesta-estado-inicial",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "timeout": 6,
+          "verify_tls": false,
+          "url": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation"
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "name": "peticiones-masivas-20vus-durante-3s",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "stress_endpoint",
+        "arguments": {
+          "endpoint": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation",
+          "vus": 20,
+          "duration": "3s",
+          "log_file": "k6-20vus.log"
+        }
+      }
+    },
+    {
+      "name": "peticiones-masivas-10vus-durante-10s",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "stress_endpoint",
+        "arguments": {
+          "endpoint": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation",
+          "vus": 10,
+          "duration": "5s",
+          "log_file": "k6-50vus.log"
+        }
+      }
+    },
+    {
+      "name": "peticiones-masivas-100vus-durante-15s",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "stress_endpoint",
+        "arguments": {
+          "endpoint": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation",
+          "vus": 100,
+          "duration": "15s",
+          "log_file": "k6-100vus.log"
+        }
+      }
+    }
+  ]
+}

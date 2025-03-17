@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2025-03-17" />
+  <title>Chaos Engineering Report</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:700}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}</style>
+  <style type="text/css">
+html {
+color: #222;
+font-size: 1em;
+line-height: 1.4;
+}
+::-moz-selection {
+background: #b3d4fc;
+text-shadow: none;
+}
+::selection {
+background: #b3d4fc;
+text-shadow: none;
+}
+hr {
+display: block;
+height: 1px;
+border: 0;
+border-top: 1px solid #ccc;
+margin: 1em 0;
+padding: 0;
+}
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+vertical-align: middle;
+}
+fieldset {
+border: 0;
+margin: 0;
+padding: 0;
+}
+textarea {
+resize: vertical;
+}
+.browserupgrade {
+margin: 0.2em 0;
+background: #ccc;
+color: #000;
+padding: 0.2em 0;
+}
+
+
+@media only screen and (min-width: 35em) {
+}
+@media print,
+(-o-min-device-pixel-ratio: 5/4),
+(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 120dpi) {
+}
+
+.hidden {
+display: none !important;
+visibility: hidden;
+}
+.visuallyhidden {
+border: 0;
+clip: rect(0 0 0 0);
+height: 1px;
+margin: -1px;
+overflow: hidden;
+padding: 0;
+position: absolute;
+width: 1px;
+}
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+clip: auto;
+height: auto;
+margin: 0;
+overflow: visible;
+position: static;
+width: auto;
+}
+.invisible {
+visibility: hidden;
+}
+.clearfix:before,
+.clearfix:after {
+content: " ";
+display: table;
+}
+.clearfix:after {
+clear: both;
+}
+.clearfix {
+*zoom: 1;
+}
+
+@media print {
+*,
+*:before,
+*:after {
+background: transparent !important;
+color: #000 !important;
+box-shadow: none !important;
+text-shadow: none !important;
+}
+a,
+a:visited {
+text-decoration: underline;
+}
+a[href]:after {
+content: " (" attr(href) ")";
+}
+abbr[title]:after {
+content: " (" attr(title) ")";
+}
+a[href^="#"]:after,
+a[href^="javascript:"]:after {
+content: "";
+}
+pre,
+blockquote {
+border: 1px solid #999;
+page-break-inside: avoid;
+}
+thead {
+display: table-header-group;
+}
+tr,
+img {
+page-break-inside: avoid;
+}
+img {
+max-width: 100% !important;
+}
+p,
+h2,
+h3 {
+orphans: 3;
+widows: 3;
+}
+h2,
+h3 {
+page-break-after: avoid;
+}
+}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Chaos Engineering Report</h1>
+<p class="date">17 March 2025</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#summary" id="toc-summary">Summary</a></li>
+<li><a href="#experiment" id="toc-experiment">Experiment</a>
+<ul>
+<li><a href="#es-posible-que-en-menos-de-15s-sea-posible-recuperar-las-tareas-que-han-sido-perdidas-o-eliminadas-de-nuestro-servicio-ecs" id="toc-es-posible-que-en-menos-de-15s-sea-posible-recuperar-las-tareas-que-han-sido-perdidas-o-eliminadas-de-nuestro-servicio-ecs">Es
+posible que en menos de 15s sea posible recuperar las tareas que han
+sido perdidas o eliminadas de nuestro servicio ECS?</a>
+<ul>
+<li><a href="#summary-1" id="toc-summary-1">Summary</a></li>
+<li><a href="#definition" id="toc-definition">Definition</a></li>
+<li><a href="#result" id="toc-result">Result</a></li>
+<li><a href="#appendix" id="toc-appendix">Appendix</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="summary">Summary</h1>
+<p>This report aggregates 1 experiments spanning over the following
+subjects:</p>
+<p><em>ECS</em>, <em>ALB</em>, <em>ECR</em></p>
+<h1 id="experiment">Experiment</h1>
+<h2 id="es-posible-que-en-menos-de-15s-sea-posible-recuperar-las-tareas-que-han-sido-perdidas-o-eliminadas-de-nuestro-servicio-ecs">Es
+posible que en menos de 15s sea posible recuperar las tareas que han
+sido perdidas o eliminadas de nuestro servicio ECS?</h2>
+<p>Al finalizar, detenerse o presentarse algun inconveniente con alguna
+tarea del ECS se deberia ejecutar automaticamente una nueva tarea en
+menos de 15s.</p>
+<h3 id="summary-1">Summary</h3>
+<p>Es posible que en menos de 15s sea posible recuperar las tareas que
+han sido perdidas o eliminadas de nuestro servicio ECS?</p>
+<p>Al finalizar, detenerse o presentarse algun inconveniente con alguna
+tarea del ECS se deberia ejecutar automaticamente una nueva tarea en
+menos de 15s.</p>
+<table>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>completed</td>
+</tr>
+<tr>
+<td><strong>Tagged</strong></td>
+<td>ECS, ECR, ALB</td>
+</tr>
+<tr>
+<td><strong>Executed From</strong></td>
+<td>Mac-Studio-de-Juan.local</td>
+</tr>
+<tr>
+<td><strong>Platform</strong></td>
+<td>macOS-15.3.1-arm64-arm-64bit</td>
+</tr>
+<tr>
+<td><strong>Started</strong></td>
+<td>Mon, 17 Mar 2025 12:30:08 GMT</td>
+</tr>
+<tr>
+<td><strong>Completed</strong></td>
+<td>Mon, 17 Mar 2025 12:30:51 GMT</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>43 seconds</td>
+</tr>
+</tbody>
+</table>
+<h3 id="definition">Definition</h3>
+<p>The experiment was made of 3 actions, to vary conditions in your
+system, and 0 probes, to collect objective data from your system during
+the experiment.</p>
+<h4 id="steady-state-hypothesis">Steady State Hypothesis</h4>
+<p>The steady state hypothesis this experiment tried was
+“<strong>Validacion del impacto de disminuir los recursos de un
+servicio</strong>”.</p>
+<h5 id="before-run">Before Run</h5>
+<p>The steady state was verified</p>
+<table>
+<colgroup>
+<col style="width: 65%" />
+<col style="width: 28%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr>
+<th>Probe</th>
+<th>Tolerance</th>
+<th>Verified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>respuesta-estado-inicial</td>
+<td> 200</td>
+<td>True</td>
+</tr>
+<tr>
+<td>validacion de la cantidad de tareas del servicio</td>
+<td> {‘type’: ‘jsonpath’, ‘path’:
+’$.services.*[?(@.runningCount)].runningCount’, ‘expect’: [2]}</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+<h5 id="after-run">After Run</h5>
+<p>The steady state was not verified. </p>
+<table>
+<colgroup>
+<col style="width: 65%" />
+<col style="width: 28%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr>
+<th>Probe</th>
+<th>Tolerance</th>
+<th>Verified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>respuesta-estado-inicial</td>
+<td> 200</td>
+<td>True</td>
+</tr>
+<tr>
+<td>validacion de la cantidad de tareas del servicio</td>
+<td> {‘type’: ‘jsonpath’, ‘path’:
+’$.services.*[?(@.runningCount)].runningCount’, ‘expect’: [2]}</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+<h4 id="method">Method</h4>
+<p>The experiment method defines the sequence of activities that help
+gathering evidence towards, or against, the hypothesis.</p>
+<p>The following activities were conducted as part of the experimental’s
+method:</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>action</td>
+<td> peticiones-masivas-100vus-durante-5s</td>
+</tr>
+<tr>
+<td>action</td>
+<td> stop-task</td>
+</tr>
+<tr>
+<td>action</td>
+<td> peticiones-masivas-1000vus-durante-20s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="result">Result</h3>
+<p>The experiment was conducted on Mon, 17 Mar 2025 12:30:08 GMT and
+lasted roughly 43 seconds.</p>
+<h4 id="action---peticiones-masivas-100vus-durante-5s">Action -
+peticiones-masivas-100vus-durante-5s</h4>
+<table>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>succeeded</td>
+</tr>
+<tr>
+<td><strong>Background</strong></td>
+<td>False</td>
+</tr>
+<tr>
+<td><strong>Started</strong></td>
+<td>Mon, 17 Mar 2025 12:30:09 GMT</td>
+</tr>
+<tr>
+<td><strong>Ended</strong></td>
+<td>Mon, 17 Mar 2025 12:30:15 GMT</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>6 seconds</td>
+</tr>
+</tbody>
+</table>
+<p>The action provider that was executed:</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 79%" />
+</colgroup>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td>python</td>
+</tr>
+<tr>
+<td><strong>Module</strong></td>
+<td>chaosk6.actions</td>
+</tr>
+<tr>
+<td><strong>Function</strong></td>
+<td>stress_endpoint</td>
+</tr>
+<tr>
+<td><strong>Arguments</strong></td>
+<td>{‘endpoint’:
+‘http://chaos-application-lb-1919189739.us-east-1.elb.amazonaws.com/’,
+‘vus’: 100, ‘duration’: ‘5s’, ‘log_file’: ‘k6-100vus-5s.log’}</td>
+</tr>
+</tbody>
+</table>
+<h4 id="action---stop-task">Action - stop-task</h4>
+<table>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>succeeded</td>
+</tr>
+<tr>
+<td><strong>Background</strong></td>
+<td>False</td>
+</tr>
+<tr>
+<td><strong>Started</strong></td>
+<td>Mon, 17 Mar 2025 12:30:15 GMT</td>
+</tr>
+<tr>
+<td><strong>Ended</strong></td>
+<td>Mon, 17 Mar 2025 12:30:16 GMT</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>1 second</td>
+</tr>
+</tbody>
+</table>
+<p>The action provider that was executed:</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 79%" />
+</colgroup>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td>python</td>
+</tr>
+<tr>
+<td><strong>Module</strong></td>
+<td>chaosaws.ecs.actions</td>
+</tr>
+<tr>
+<td><strong>Function</strong></td>
+<td>stop_task</td>
+</tr>
+<tr>
+<td><strong>Arguments</strong></td>
+<td>{‘cluster’: ‘chaos-app-python’, ‘service’: ‘app-python’, ‘reason’:
+‘Chaos Testing’}</td>
+</tr>
+</tbody>
+</table>
+<h4 id="action---peticiones-masivas-1000vus-durante-20s">Action -
+peticiones-masivas-1000vus-durante-20s</h4>
+<table>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>succeeded</td>
+</tr>
+<tr>
+<td><strong>Background</strong></td>
+<td>False</td>
+</tr>
+<tr>
+<td><strong>Started</strong></td>
+<td>Mon, 17 Mar 2025 12:30:16 GMT</td>
+</tr>
+<tr>
+<td><strong>Ended</strong></td>
+<td>Mon, 17 Mar 2025 12:30:51 GMT</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>35 seconds</td>
+</tr>
+</tbody>
+</table>
+<p>The action provider that was executed:</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 79%" />
+</colgroup>
+<tbody>
+<tr>
+<td><strong>Type</strong></td>
+<td>python</td>
+</tr>
+<tr>
+<td><strong>Module</strong></td>
+<td>chaosk6.actions</td>
+</tr>
+<tr>
+<td><strong>Function</strong></td>
+<td>stress_endpoint</td>
+</tr>
+<tr>
+<td><strong>Arguments</strong></td>
+<td>{‘endpoint’:
+‘http://chaos-application-lb-1919189739.us-east-1.elb.amazonaws.com/’,
+‘vus’: 1000, ‘duration’: ‘20s’, ‘log_file’: ‘k6-1000vus-20s.log’}</td>
+</tr>
+</tbody>
+</table>
+<h3 id="appendix">Appendix</h3>
+<h4 id="action---peticiones-masivas-100vus-durante-5s-1">Action -
+peticiones-masivas-100vus-durante-5s</h4>
+<p>The <em>action</em> returned the following result:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>True</span></code></pre></div>
+<h4 id="action---stop-task-1">Action - stop-task</h4>
+<p>The <em>action</em> returned the following result:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>{<span class="st">&#39;ResponseMetadata&#39;</span><span class="op">:</span> {<span class="st">&#39;HTTPHeaders&#39;</span><span class="op">:</span> {<span class="st">&#39;content-length&#39;</span><span class="op">:</span> <span class="st">&#39;2265&#39;</span><span class="op">,</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">&#39;content-type&#39;</span><span class="op">:</span> <span class="st">&#39;application/x-amz-json-1.1&#39;</span><span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">&#39;date&#39;</span><span class="op">:</span> <span class="st">&#39;Mon, 17 Mar 2025 12:30:16 GMT&#39;</span><span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">&#39;x-amzn-requestid&#39;</span><span class="op">:</span> <span class="st">&#39;42a49e26-a067-4a2e-8f63-a7954225b93a&#39;</span>}<span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&#39;HTTPStatusCode&#39;</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&#39;RequestId&#39;</span><span class="op">:</span> <span class="st">&#39;42a49e26-a067-4a2e-8f63-a7954225b93a&#39;</span><span class="op">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&#39;RetryAttempts&#39;</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> <span class="st">&#39;task&#39;</span><span class="op">:</span> {<span class="st">&#39;attachments&#39;</span><span class="op">:</span> [{<span class="st">&#39;details&#39;</span><span class="op">:</span> [{<span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;subnetId&#39;</span><span class="op">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&#39;value&#39;</span><span class="op">:</span> <span class="st">&#39;subnet-0b2ac06f893a0aee9&#39;</span>}<span class="op">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                       {<span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;networkInterfaceId&#39;</span><span class="op">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&#39;value&#39;</span><span class="op">:</span> <span class="st">&#39;eni-09f7194339dbcb80b&#39;</span>}<span class="op">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                       {<span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;macAddress&#39;</span><span class="op">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&#39;value&#39;</span><span class="op">:</span> <span class="st">&#39;12:c8:3a:82:5b:7b&#39;</span>}<span class="op">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                                       {<span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;privateDnsName&#39;</span><span class="op">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&#39;value&#39;</span><span class="op">:</span> <span class="st">&#39;ip-172-31-84-146.ec2.internal&#39;</span>}<span class="op">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                                       {<span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;privateIPv4Address&#39;</span><span class="op">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&#39;value&#39;</span><span class="op">:</span> <span class="st">&#39;172.31.84.146&#39;</span>}]<span class="op">,</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&#39;id&#39;</span><span class="op">:</span> <span class="st">&#39;fbb98e27-6bf0-478b-b398-3d83df981e6d&#39;</span><span class="op">,</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&#39;status&#39;</span><span class="op">:</span> <span class="st">&#39;ATTACHED&#39;</span><span class="op">,</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&#39;type&#39;</span><span class="op">:</span> <span class="st">&#39;ElasticNetworkInterface&#39;</span>}]<span class="op">,</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;attributes&#39;</span><span class="op">:</span> [{<span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;ecs.cpu-architecture&#39;</span><span class="op">,</span> <span class="st">&#39;value&#39;</span><span class="op">:</span> <span class="st">&#39;x86_64&#39;</span>}]<span class="op">,</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;availabilityZone&#39;</span><span class="op">:</span> <span class="st">&#39;us-east-1c&#39;</span><span class="op">,</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;capacityProviderName&#39;</span><span class="op">:</span> <span class="st">&#39;FARGATE&#39;</span><span class="op">,</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;clusterArn&#39;</span><span class="op">:</span> <span class="st">&#39;arn:aws:ecs:us-east-1:875296219312:cluster/chaos-app-python&#39;</span><span class="op">,</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;connectivity&#39;</span><span class="op">:</span> <span class="st">&#39;CONNECTED&#39;</span><span class="op">,</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;connectivityAt&#39;</span><span class="op">:</span> <span class="st">&#39;2025-03-17T07:11:57.494000-05:00&#39;</span><span class="op">,</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;containers&#39;</span><span class="op">:</span> [{<span class="st">&#39;containerArn&#39;</span><span class="op">:</span> <span class="st">&#39;arn:aws:ecs:us-east-1:875296219312:container/chaos-app-python/84c09f42848b43d1b3469c699625a664/205e4d6c-f8c8-4a86-94c2-9a404560d06e&#39;</span><span class="op">,</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;cpu&#39;</span><span class="op">:</span> <span class="st">&#39;0&#39;</span><span class="op">,</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;image&#39;</span><span class="op">:</span> <span class="st">&#39;875296219312.dkr.ecr.us-east-1.amazonaws.com/chaos-app-python:latest&#39;</span><span class="op">,</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;imageDigest&#39;</span><span class="op">:</span> <span class="st">&#39;sha256:da655f3b4fac02f9e782420766d1e2b3da63915c5edfc57715c9a79bf67ba9f7&#39;</span><span class="op">,</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;lastStatus&#39;</span><span class="op">:</span> <span class="st">&#39;RUNNING&#39;</span><span class="op">,</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;chaos-app-python-container&#39;</span><span class="op">,</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;networkBindings&#39;</span><span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;networkInterfaces&#39;</span><span class="op">:</span> [{<span class="st">&#39;attachmentId&#39;</span><span class="op">:</span> <span class="st">&#39;fbb98e27-6bf0-478b-b398-3d83df981e6d&#39;</span><span class="op">,</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;privateIpv4Address&#39;</span><span class="op">:</span> <span class="st">&#39;172.31.84.146&#39;</span>}]<span class="op">,</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;runtimeId&#39;</span><span class="op">:</span> <span class="st">&#39;84c09f42848b43d1b3469c699625a664-3402528024&#39;</span><span class="op">,</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&#39;taskArn&#39;</span><span class="op">:</span> <span class="st">&#39;arn:aws:ecs:us-east-1:875296219312:task/chaos-app-python/84c09f42848b43d1b3469c699625a664&#39;</span>}]<span class="op">,</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;cpu&#39;</span><span class="op">:</span> <span class="st">&#39;256&#39;</span><span class="op">,</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;createdAt&#39;</span><span class="op">:</span> <span class="st">&#39;2025-03-17T07:11:52.655000-05:00&#39;</span><span class="op">,</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;desiredStatus&#39;</span><span class="op">:</span> <span class="st">&#39;STOPPED&#39;</span><span class="op">,</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;enableExecuteCommand&#39;</span><span class="op">:</span> False<span class="op">,</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;ephemeralStorage&#39;</span><span class="op">:</span> {<span class="st">&#39;sizeInGiB&#39;</span><span class="op">:</span> <span class="dv">20</span>}<span class="op">,</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;fargateEphemeralStorage&#39;</span><span class="op">:</span> {<span class="st">&#39;sizeInGiB&#39;</span><span class="op">:</span> <span class="dv">20</span>}<span class="op">,</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;group&#39;</span><span class="op">:</span> <span class="st">&#39;service:app-python&#39;</span><span class="op">,</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;lastStatus&#39;</span><span class="op">:</span> <span class="st">&#39;DEACTIVATING&#39;</span><span class="op">,</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;launchType&#39;</span><span class="op">:</span> <span class="st">&#39;FARGATE&#39;</span><span class="op">,</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;memory&#39;</span><span class="op">:</span> <span class="st">&#39;512&#39;</span><span class="op">,</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;overrides&#39;</span><span class="op">:</span> {<span class="st">&#39;containerOverrides&#39;</span><span class="op">:</span> [{<span class="st">&#39;name&#39;</span><span class="op">:</span> <span class="st">&#39;chaos-app-python-container&#39;</span>}]<span class="op">,</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&#39;inferenceAcceleratorOverrides&#39;</span><span class="op">:</span> []}<span class="op">,</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;platformFamily&#39;</span><span class="op">:</span> <span class="st">&#39;Linux&#39;</span><span class="op">,</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;platformVersion&#39;</span><span class="op">:</span> <span class="st">&#39;1.4.0&#39;</span><span class="op">,</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;pullStartedAt&#39;</span><span class="op">:</span> <span class="st">&#39;2025-03-17T07:12:05.465000-05:00&#39;</span><span class="op">,</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;pullStoppedAt&#39;</span><span class="op">:</span> <span class="st">&#39;2025-03-17T07:12:14.822000-05:00&#39;</span><span class="op">,</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;startedAt&#39;</span><span class="op">:</span> <span class="st">&#39;2025-03-17T07:12:24.259000-05:00&#39;</span><span class="op">,</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;startedBy&#39;</span><span class="op">:</span> <span class="st">&#39;ecs-svc/4269612606193660332&#39;</span><span class="op">,</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;stopCode&#39;</span><span class="op">:</span> <span class="st">&#39;UserInitiated&#39;</span><span class="op">,</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;stoppedReason&#39;</span><span class="op">:</span> <span class="st">&#39;Chaos Testing&#39;</span><span class="op">,</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;stoppingAt&#39;</span><span class="op">:</span> <span class="st">&#39;2025-03-17T07:30:16.248000-05:00&#39;</span><span class="op">,</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;tags&#39;</span><span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;taskArn&#39;</span><span class="op">:</span> <span class="st">&#39;arn:aws:ecs:us-east-1:875296219312:task/chaos-app-python/84c09f42848b43d1b3469c699625a664&#39;</span><span class="op">,</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;taskDefinitionArn&#39;</span><span class="op">:</span> <span class="st">&#39;arn:aws:ecs:us-east-1:875296219312:task-definition/chaos-app-python-task:8&#39;</span><span class="op">,</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>          <span class="st">&#39;version&#39;</span><span class="op">:</span> <span class="dv">5</span>}}</span></code></pre></div>
+<h4 id="action---peticiones-masivas-1000vus-durante-20s-1">Action -
+peticiones-masivas-1000vus-durante-20s</h4>
+<p>The <em>action</em> returned the following result:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>True</span></code></pre></div>
+</body>
+</html>

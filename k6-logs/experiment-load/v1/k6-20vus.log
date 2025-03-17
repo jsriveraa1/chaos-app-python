@@ -1,0 +1,36 @@
+time="2025-03-16T20:24:02-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:03-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:07-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:08-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:08-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:09-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:10-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:11-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:12-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:14-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:15-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:16-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:19-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:20-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:23-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:23-05:00" level=info msg="Status: 200 OK" source=console
+time="2025-03-16T20:24:26-05:00" level=info msg="Status: 200 OK" source=console
+
+     data_received..................: 3.0 kB 90 B/s
+     data_sent......................: 2.7 kB 81 B/s
+   ✓ failures.......................: 0.00%  0 out of 17
+     http_req_blocked...............: avg=105.17ms min=93.6ms  med=105.78ms max=118.26ms p(90)=112.1ms  p(95)=118.05ms
+     http_req_connecting............: avg=103.66ms min=92.29ms med=104.34ms max=116.34ms p(90)=110.33ms p(95)=116.28ms
+     http_req_duration..............: avg=15.42s   min=4.18s   med=14.09s   max=28.13s   p(90)=25.16s   p(95)=25.76s  
+       { expected_response:true }...: avg=15.42s   min=4.18s   med=14.09s   max=28.13s   p(90)=25.16s   p(95)=25.76s  
+     http_req_failed................: 0.00%  0 out of 17
+     http_req_receiving.............: avg=405.7µs  min=47µs    med=315µs    max=2.41ms   p(90)=425µs    p(95)=828.59µs
+     http_req_sending...............: avg=47.29µs  min=14µs    med=25µs     max=243µs    p(90)=103.2µs  p(95)=146.99µs
+     http_req_tls_handshaking.......: avg=0s       min=0s      med=0s       max=0s       p(90)=0s       p(95)=0s      
+     http_req_waiting...............: avg=15.42s   min=4.18s   med=14.09s   max=28.13s   p(90)=25.16s   p(95)=25.76s  
+     http_reqs......................: 17     0.51514/s
+     iteration_duration.............: avg=15.52s   min=4.28s   med=14.2s    max=28.24s   p(90)=25.27s   p(95)=25.86s  
+     iterations.....................: 17     0.51514/s
+     vus............................: 3      min=3       max=20
+     vus_max........................: 20     min=20      max=20
+

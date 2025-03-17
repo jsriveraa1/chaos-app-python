@@ -1,0 +1,77 @@
+{
+  "title": "Cual es impacto en la duración de las solicitudes de un servicio ECS al eliminar el 50% de sus tareas y aumentar la demanda de solicitudes ?",
+  "description": "Se desea validar el aumento en la duración de procesamiento de las solicitudes en un ambiente con fallos (ECS con el 50% de sus tareas abajo) y en una hora de alta transaccionalidad.",
+  "tags": ["ECS", "ECR", "ALB"],
+  "configuration": {
+    "aws_region": "us-east-1"
+  },
+  "steady-state-hypothesis": {
+    "title": "Consumo del servicio /operation",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "validacion de una duracion de respuesta inferior a 6s para 10uv concurrente",
+        "tolerance": 1,
+        "provider": {
+          "type": "process",
+          "path": "grep",
+          "arguments": "level=error k6-test-10uv.log"
+        }
+      },
+      {
+        "type": "probe",
+        "name": "validacion de una duracion de respuesta inferior a 6s para 100uv concurrente",
+        "tolerance": 1,
+        "provider": {
+          "type": "process",
+          "path": "grep",
+          "arguments": "level=error k6-test-100uv.log"
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "name": "update-desired-count",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosaws.ecs.actions",
+        "func": "update_desired_count",
+        "arguments": {
+          "cluster": "chaos-app-python",
+          "service": "app-python",
+          "desired_count": 1
+        }
+      }
+    },
+    {
+      "name": "run-script",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "run_script",
+        "arguments": {
+          "script_path": "/Users/juanse/Documents/Projects/chaos/chaos-app-python/k6-logs/experiment-load/v2/api-test.js",
+          "log_file": "k6-test-10uv.log",
+          "vus": 10
+        }
+      }
+    },
+    {
+      "name": "run-script",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "run_script",
+        "arguments": {
+          "script_path": "/Users/juanse/Documents/Projects/chaos/chaos-app-python/k6-logs/experiment-load/v2/api-test.js",
+          "log_file": "k6-test-100uv.log",
+          "vus": 100
+        }
+      }
+    }
+  ]
+}

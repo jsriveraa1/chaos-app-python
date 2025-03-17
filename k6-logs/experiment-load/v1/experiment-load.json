@@ -1,0 +1,100 @@
+{
+  "title": "Cual es impacto de un servicio ECS al eliminar el 50% de sus tareas ?",
+  "description": "El impacto es muy significativo al tratar de manejar las solicitudes.",
+  "tags": ["ECS", "ECR", "ALB"],
+  "configuration": {
+    "aws_region": "us-east-1"
+  },
+  "steady-state-hypothesis": {
+    "title": "Validacion del impacto de disminuir los recursos de un servicio",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "respuesta-estado-inicial",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "timeout": 6,
+          "verify_tls": false,
+          "url": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation"
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "name": "update-desired-count",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosaws.ecs.actions",
+        "func": "update_desired_count",
+        "arguments": {
+          "cluster": "chaos-app-python",
+          "service": "app-python",
+          "desired_count": 1
+        }
+      }
+    },
+    {
+      "name": "peticiones-masivas-20vus-durante-3s",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "stress_endpoint",
+        "arguments": {
+          "endpoint": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation",
+          "vus": 20,
+          "duration": "3s",
+          "log_file": "k6-20vus.log"
+        }
+      }
+    },
+    {
+      "name": "peticiones-masivas-50vus-durante-10s",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "stress_endpoint",
+        "arguments": {
+          "endpoint": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation",
+          "vus": 50,
+          "duration": "5s",
+          "log_file": "k6-50vus.log"
+        }
+      }
+    },
+    {
+      "name": "peticiones-masivas-100vus-durante-15s",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "stress_endpoint",
+        "arguments": {
+          "endpoint": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation",
+          "vus": 100,
+          "duration": "15s",
+          "log_file": "k6-100vus.log"
+        }
+      }
+    },
+    {
+      "name": "peticiones-masivas-1000vus-durante-15s",
+      "type": "action",
+      "provider": {
+        "type": "python",
+        "module": "chaosk6.actions",
+        "func": "stress_endpoint",
+        "arguments": {
+          "endpoint": "http://chaos-application-lb-1563325877.us-east-1.elb.amazonaws.com/operation",
+          "vus": 1000,
+          "duration": "15s",
+          "log_file": "k6-1000vus.log"
+        }
+      }
+    }
+  ]
+}
