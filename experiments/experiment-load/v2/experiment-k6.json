@@ -53,7 +53,7 @@
         "module": "chaosk6.actions",
         "func": "run_script",
         "arguments": {
-          "script_path": "/Users/juanse/Documents/Projects/chaos/chaos-app-python/k6-logs/experiment-load/v2/api-test.js",
+          "script_path": "/Users/juanse/Documents/Projects/chaos/chaos-app-python/experiments/experiment-load/v2/api-test.js",
           "log_file": "k6-test-10uv.log",
           "vus": 10
         }
@@ -67,7 +67,7 @@
         "module": "chaosk6.actions",
         "func": "run_script",
         "arguments": {
-          "script_path": "/Users/juanse/Documents/Projects/chaos/chaos-app-python/k6-logs/experiment-load/v2/api-test.js",
+          "script_path": "/Users/juanse/Documents/Projects/chaos/chaos-app-python/experiments/experiment-load/v2/api-test.js",
           "log_file": "k6-test-100uv.log",
           "vus": 100
         }
